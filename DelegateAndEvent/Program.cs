@@ -129,9 +129,10 @@ namespace DelegateAndEvent
             Heater heater = new Heater();
             Alarm alarm = new Alarm();
             Display display = new Display();
-            heater.BoilEvent += alarm.MakeAlert;            //注册方法
-            heater.BoilEvent += (new Alarm()).MakeAlert;    //给匿名对象注册方法
-            heater.BoilEvent += Display.ShowMsg;            //注册静态方法
+            heater.Boiled += alarm.MakeAlert;            //注册方法
+            heater.Boiled += (new Alarm()).MakeAlert;    //给匿名对象注册方法
+            heater.Boiled += new Heater.BoiledEventHandler(alarm.MakeAlert); //也可以这么注册
+            heater.Boiled += Display.ShowMsg;            //注册静态方法
             heater.BoilWater();     //烧水，会自动调用注册过对象的方法
             Console.WriteLine();
 
@@ -144,29 +145,44 @@ namespace DelegateAndEvent
         /// </summary>
         public class Heater
         {
-            /// <summary>
-            /// 水温
-            /// </summary>
-            private int temperatur;
+            private int temperature;         //水温
+            public string type = "mode s";  //型号
+            public string area = "Japan";   //产地
 
-            public delegate void BoilHandler(int temperatur);
+            public delegate void BoiledEventHandler(object sender,BoilEventArgs e);
 
-            public event BoilHandler BoilEvent;
+            public event BoiledEventHandler Boiled;   //声明事件
 
-            /// <summary>
-            /// 烧水
-            /// </summary>
+            //定义BoilEventArgs类，传递给Observer所感兴趣的信息
+            public class BoilEventArgs:EventArgs
+            {
+                public readonly int temperature;
+                public BoilEventArgs(int temperature)
+                {
+                    this.temperature = temperature;
+                }
+            }
+
+            //可以提供继承Header的类重写，以便继承类拒绝其他对象怼它的监视
+            protected virtual void OnBoiled(BoilEventArgs e)
+            {
+                if (Boiled != null)
+                {
+                    Boiled(this,e);     //调用所有注册对象的方法
+                }
+            }
+
+            //烧水
             public void BoilWater()
             {
                 for (int i = 0; i < 100; i++)
                 {
-                    temperatur = i;
-                    if (temperatur > 95)
+                    temperature = i;
+                    if (temperature > 95)
                     {
-                        if (BoilEvent != null)
-                        {
-                            BoilEvent(temperatur);  //调用所有注册对象的方法
-                        }
+                        //建立BoilEventArgs对象。
+                        BoilEventArgs e = new BoilEventArgs(temperature);
+                        OnBoiled(e);        //调用OnBoiled方法
                     }
                 }
             }
@@ -178,9 +194,14 @@ namespace DelegateAndEvent
             /// 发出语音警报
             /// </summary>
             /// <param name="param"></param>
-            public void MakeAlert(int param)
+            public void MakeAlert(object sender,Heater.BoilEventArgs e)
             {
-                Console.WriteLine("Alarm:叮咚，水温已经{0}度了", param);
+                Heater heater = (Heater)sender;
+
+                //访问send的公共字段
+                Console.WriteLine("Alarm:{0}-{1}:",heater.area,heater.type);
+                Console.WriteLine("Alarm:叮咚，水已经{0}度了",e.temperature);
+                Console.WriteLine();
             }
         }
 
@@ -189,9 +210,12 @@ namespace DelegateAndEvent
             /// <summary>
             /// 显示水温
             /// </summary>
-            public static void ShowMsg(int param)
+            public static void ShowMsg(object sender,Heater.BoilEventArgs e)    //静态方法
             {
-                Console.WriteLine("Display:水快开了，当前温度：{0}度。", param);
+                Heater heater = (Heater)sender;
+                Console.WriteLine("Display：{0} - {1}: ", heater.area, heater.type);
+                Console.WriteLine("Display：水快烧开了，当前温度：{0}度。", e.temperature);
+                Console.WriteLine();
             }
         }
         #endregion
