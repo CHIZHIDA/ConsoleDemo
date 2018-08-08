@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DelegateAndEvent
@@ -124,7 +126,7 @@ namespace DelegateAndEvent
             gm3.gmGreetingDelegate("gmdelegate");
             Console.WriteLine();
 
-            Console.WriteLine("模拟烧水过程：");
+            Console.WriteLine("模拟烧水过程，Observer设计模式：");
             Console.WriteLine();
             Heater heater = new Heater();
             Alarm alarm = new Alarm();
@@ -135,6 +137,37 @@ namespace DelegateAndEvent
             heater.Boiled += Display.ShowMsg;            //注册静态方法
             heater.BoilWater();     //烧水，会自动调用注册过对象的方法
             Console.WriteLine();
+
+            Console.WriteLine("不使用异步调用的通常情况：");
+            Console.WriteLine("Client application start");
+            Thread.CurrentThread.Name = "Main Thread";
+            Calculator cal = new Calculator();
+            int result = cal.Add(6, 8);
+            Console.WriteLine("Result：{0}", result);
+            //做其他事情，模拟需要执行3秒钟
+            for (int i = 1; i <= 3; i++)
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(i));
+                Console.WriteLine("{0}：Client excute {1} second(s).", Thread.CurrentThread.Name, i);
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("使用异步调用：");
+            Console.WriteLine("Client application started!\n");
+            //Thread.CurrentThread.Name = "Main Thread";
+            AddDelegate del = new AddDelegate(cal.Add);
+            string data = "And data you want to pass";
+
+            AsyncCallback callback = new AsyncCallback(Calculator.OnAddComplete);
+            IAsyncResult asyncResult = del.BeginInvoke(5, 6, callback, data);   //异步调用方法
+            del.EndInvoke(asyncResult);
+            // 做某些其它的事情，模拟需要执行3 秒钟
+            for (int i = 1; i <= 3; i++)
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(i));
+                Console.WriteLine("{0}: Client executed {1} second(s).", Thread.CurrentThread.Name, i);
+            }
+            Console.ReadLine();
 
             Console.ReadKey();
         }
@@ -149,12 +182,12 @@ namespace DelegateAndEvent
             public string type = "mode s";  //型号
             public string area = "Japan";   //产地
 
-            public delegate void BoiledEventHandler(object sender,BoilEventArgs e);
+            public delegate void BoiledEventHandler(object sender, BoilEventArgs e);
 
             public event BoiledEventHandler Boiled;   //声明事件
 
             //定义BoilEventArgs类，传递给Observer所感兴趣的信息
-            public class BoilEventArgs:EventArgs
+            public class BoilEventArgs : EventArgs
             {
                 public readonly int temperature;
                 public BoilEventArgs(int temperature)
@@ -168,7 +201,7 @@ namespace DelegateAndEvent
             {
                 if (Boiled != null)
                 {
-                    Boiled(this,e);     //调用所有注册对象的方法
+                    Boiled(this, e);     //调用所有注册对象的方法
                 }
             }
 
@@ -194,13 +227,13 @@ namespace DelegateAndEvent
             /// 发出语音警报
             /// </summary>
             /// <param name="param"></param>
-            public void MakeAlert(object sender,Heater.BoilEventArgs e)
+            public void MakeAlert(object sender, Heater.BoilEventArgs e)
             {
                 Heater heater = (Heater)sender;
 
                 //访问send的公共字段
-                Console.WriteLine("Alarm:{0}-{1}:",heater.area,heater.type);
-                Console.WriteLine("Alarm:叮咚，水已经{0}度了",e.temperature);
+                Console.WriteLine("Alarm:{0}-{1}:", heater.area, heater.type);
+                Console.WriteLine("Alarm:叮咚，水已经{0}度了", e.temperature);
                 Console.WriteLine();
             }
         }
@@ -210,12 +243,47 @@ namespace DelegateAndEvent
             /// <summary>
             /// 显示水温
             /// </summary>
-            public static void ShowMsg(object sender,Heater.BoilEventArgs e)    //静态方法
+            public static void ShowMsg(object sender, Heater.BoilEventArgs e)    //静态方法
             {
                 Heater heater = (Heater)sender;
                 Console.WriteLine("Display：{0} - {1}: ", heater.area, heater.type);
                 Console.WriteLine("Display：水快烧开了，当前温度：{0}度。", e.temperature);
                 Console.WriteLine();
+            }
+        }
+        #endregion
+
+        #region 模拟计算
+        public delegate int AddDelegate(int x, int y);
+        public class Calculator
+        {
+            public int Add(int x, int y)
+            {
+                if (Thread.CurrentThread.IsThreadPoolThread)
+                {
+                    Thread.CurrentThread.Name = "Pool Thread";
+                }
+
+                Console.WriteLine("Method Invoke");
+
+                //执行某些事情，模拟需要执行2秒
+                for (int i = 1; i <= 2; i++)
+                {
+                    Thread.Sleep(TimeSpan.FromSeconds(i));
+                    Console.WriteLine("{0}：Add execute {1} second(s).", Thread.CurrentThread.Name, i);
+                }
+
+                Console.WriteLine("Method complete");
+                return x + y;
+            }
+
+            public static void OnAddComplete(IAsyncResult asyncResult)
+            {
+                AsyncResult result = (AsyncResult)asyncResult;
+                AddDelegate del = (AddDelegate)result.AsyncDelegate;
+                string data = (string)asyncResult.AsyncState;
+                int run = del.EndInvoke(asyncResult);
+                Console.WriteLine("{0}：Result,{1};Data:{2}", Thread.CurrentThread.Name, run, data);
             }
         }
         #endregion
