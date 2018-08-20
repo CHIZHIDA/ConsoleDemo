@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionDelegate", "Delegate\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelegateAndEvent", "DelegateAndEvent\DelegateAndEvent.csproj", "{9FB04D6F-6113-46BD-A596-670FB808373E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STMPSendMail", "STMPSendMail\STMPSendMail.csproj", "{F10AB7A3-848F-4A02-AFE7-1ABB9A62524B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9FB04D6F-6113-46BD-A596-670FB808373E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FB04D6F-6113-46BD-A596-670FB808373E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FB04D6F-6113-46BD-A596-670FB808373E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F10AB7A3-848F-4A02-AFE7-1ABB9A62524B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F10AB7A3-848F-4A02-AFE7-1ABB9A62524B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F10AB7A3-848F-4A02-AFE7-1ABB9A62524B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F10AB7A3-848F-4A02-AFE7-1ABB9A62524B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
