@@ -93,7 +93,7 @@ namespace DelegateAndEvent
             GreetingDelegate delegate3;
             delegate3 = ChineseGreeting;
             delegate3 += EnglishGreeting;
-            GreetPeopple("bunding", delegate3);
+            GreetPeopple("binding", delegate3);
             Console.WriteLine();
 
             Console.WriteLine("委托绑定二：");
