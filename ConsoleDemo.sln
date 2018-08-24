@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelegateAndEvent", "Delegat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STMPSendMail", "STMPSendMail\STMPSendMail.csproj", "{F10AB7A3-848F-4A02-AFE7-1ABB9A62524B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualAbstractInterface", "VirtualAbstractInterface\VirtualAbstractInterface.csproj", "{20D18E7B-FFCD-4A5B-BB0F-D444342E71B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualAbstractInterface", "VirtualAbstractInterface\VirtualAbstractInterface.csproj", "{20D18E7B-FFCD-4A5B-BB0F-D444342E71B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFDemo", "EFDemo\EFDemo.csproj", "{DEA79085-9C87-4A07-B667-015A2060B72D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{20D18E7B-FFCD-4A5B-BB0F-D444342E71B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20D18E7B-FFCD-4A5B-BB0F-D444342E71B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20D18E7B-FFCD-4A5B-BB0F-D444342E71B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA79085-9C87-4A07-B667-015A2060B72D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA79085-9C87-4A07-B667-015A2060B72D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA79085-9C87-4A07-B667-015A2060B72D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA79085-9C87-4A07-B667-015A2060B72D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
