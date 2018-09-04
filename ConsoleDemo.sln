@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STMPSendMail", "STMPSendMai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualAbstractInterface", "VirtualAbstractInterface\VirtualAbstractInterface.csproj", "{20D18E7B-FFCD-4A5B-BB0F-D444342E71B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFDemo", "EFDemo\EFDemo.csproj", "{DEA79085-9C87-4A07-B667-015A2060B72D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCodeFirstDemo", "EFDemo\EFCodeFirstDemo.csproj", "{DEA79085-9C87-4A07-B667-015A2060B72D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
